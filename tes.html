@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,51 +7,45 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background-color: #f4f4f4;
             margin: 0;
+            padding: 20px;
         }
-        table {
-            border-collapse: collapse;
-            width: 80%;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        #searchContainer {
-            display: flex;
-            justify-content: center;
+        .search-container {
+            text-align: center;
             margin-bottom: 20px;
         }
-        #searchInput {
+        input[type="text"] {
             padding: 10px;
-            width: 300px;
+            width: 200px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        #searchButton {
+        button {
             padding: 10px 15px;
-            margin-left: 10px;
-            background-color: #4CAF50;
-            color: white;
             border: none;
+            background-color: #28a745;
+            color: white;
             border-radius: 5px;
             cursor: pointer;
         }
-        #searchButton:hover {
-            background-color: #45a049;
+        button:hover {
+            background-color: #218838;
         }
-        .message {
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .error-msg {
             color: red;
             text-align: center;
             margin-top: 20px;
@@ -60,9 +54,9 @@
 </head>
 <body>
 
-<div id="searchContainer">
-    <input type="text" id="searchInput" placeholder="Masukkan NIK atau Nama...">
-    <button id="searchButton">Cari</button>
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="Masukkan NIK atau Nama">
+    <button onclick="searchData()">Cari</button>
 </div>
 
 <table id="dataTable">
@@ -74,47 +68,44 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>1234567890123456</td>
-            <td>John Doe</td>
-            <td>Jl. Contoh No. 1</td>
-        </tr>
-        <tr>
-            <td>6543210987654321</td>
-            <td>Jane Smith</td>
-            <td>Jl. Contoh No. 2</td>
-        </tr>
+        <!-- Data akan dipaparkan di sini -->
     </tbody>
 </table>
 
-<div class="message" id="message"></div>
+<div class="error-msg" id="errorMsg"></div>
 
 <script>
-    document.getElementById('searchButton').addEventListener('click', function() {
-        const input = document.getElementById('searchInput').value.toLowerCase();
-        const rows = document.querySelectorAll('#dataTable tbody tr');
-        let found = false;
+    const data = [
+        { nik: '123456789', nama: 'Ali', alamat: 'Kuala Lumpur' },
+        { nik: '987654321', nama: 'Siti', alamat: 'Penang' },
+        { nik: '456789123', nama: 'Ahmad', alamat: 'Johor' }
+    ];
 
-        rows.forEach(row => {
-            const cells = row.getElementsByTagName('td');
-            const nik = cells[0].textContent.toLowerCase();
-            const nama = cells[1].textContent.toLowerCase();
-
-            if (nik.includes(input) || nama.includes(input)) {
-                row.style.display = '';
-                found = true;
-            } else {
-                row.style.display = 'none';
-            }
-        });
-
-        const message = document.getElementById('message');
-        if (!found && input) {
-            message.textContent = 'Data tidak terdaftar';
-        } else {
-            message.textContent = '';
+    function searchData() {
+        const input = document.getElementById('searchInput').value;
+        const filteredData = data.filter(item => item.nik === input || item.nama.toLowerCase() === input.toLowerCase());
+        const tableBody = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+        const errorMsg = document.getElementById('errorMsg');
+        
+        tableBody.innerHTML = ''; // Kosongkan jadual
+        errorMsg.innerHTML = ''; // Kosongkan mesej ralat
+        
+        if (input === '') {
+            errorMsg.innerHTML = 'Data yang anda masukkan salah atau tidak terdaftar.';
+            return;
         }
-    });
+        
+        if (filteredData.length > 0) {
+            filteredData.forEach(item => {
+                const row = tableBody.insertRow();
+                row.insertCell(0).innerText = item.nik;
+                row.insertCell(1).innerText = item.nama;
+                row.insertCell(2).innerText = item.alamat;
+            });
+        } else {
+            errorMsg.innerHTML = 'Data yang anda masukkan salah atau tidak terdaftar.';
+        }
+    }
 </script>
 
 </body>
