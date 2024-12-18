@@ -79,9 +79,9 @@
 
 <script>
     const data = [
-        { nik: '123456789', nama: 'Ali', alamat: 'Kuala Lumpur', pengajuan:'dinding rusak',Alasan:'dinding masih bagus'},
-        { nik: '987654321', nama: 'Siti', alamat: 'Penang' ,pengajuan:'dinding rusak',Alasan:'dinding sudah roboh'},
-        { nik: '456789123', nama: 'Ahmad', alamat: 'Johor',pengajuan:'gendeng rusak',Alasan:'gendeng masih bagus' }
+        { nik: '123456789', kk:'121212',nama: 'Ali', alamat: 'Kuala Lumpur', pengajuan:'dinding rusak',alasan:'dinding masih bagus'},
+        { nik: '987654321', kk:'192212',nama: 'Siti', alamat: 'Penang' ,pengajuan:'dinding rusak',alasan:'dinding sudah roboh'},
+        { nik: '456789123', kk:'172727',nama: 'Ahmad', alamat: 'Johor',pengajuan:'gendeng rusak',alasan:'gendeng masih bagus' }
     ];
 
     function searchData() {
@@ -102,8 +102,11 @@
             filteredData.forEach(item => {
                 const row = tableBody.insertRow();
                 row.insertCell(0).innerText = item.nik;
-                row.insertCell(1).innerText = item.nama;
-                row.insertCell(2).innerText = item.alamat;
+                row.insertCell(1).innerText = item.kk;
+                row.insertCell(2).innerText = item.nama;
+                row.insertCell(3).innerText = item.pemgajuan;
+                row.insertCell(4).innerText = item.alamat;
+                row.insertCell(5).innerText = item.alasan;
             });
         } else {
             errorMsg.innerHTML = 'Data yang anda masukkan salah atau tidak terdaftar.';
