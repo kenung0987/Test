@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Pengguna</title>
+    <title>Tabel Data</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,23 +11,36 @@
             margin: 0;
             padding: 20px;
         }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .search-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        table, th, td {
-            border: 1px solid #ccc;
-        }
         th, td {
             padding: 10px;
             text-align: left;
+            border: 1px solid #ccc;
         }
         th {
-            background-color: #4CAF50;
+            background-color: #007BFF;
             color: white;
         }
-        .error {
+        .not-found {
+            text-align: center;
             color: red;
             font-weight: bold;
         }
@@ -35,37 +48,59 @@
 </head>
 <body>
 
-<h1>Carian Data Pengguna</h1>
-<input type="text" id="searchInput" placeholder="Masukkan NIK atau Nama">
-<button onclick="searchData()">Cari</button>
+    <h1>Data Pencarian</h1>
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Cari NIK atau Nama..." onkeyup="searchData()">
+    </div>
 
-<div id="result"></div>
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>NIK</th>
+                <th>Nama</th>
+                <th>Alamat</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>123456789012</td>
+                <td>Ahmad</td>
+                <td>Kuala Lumpur</td>
+            </tr>
+            <tr>
+                <td>987654321012</td>
+                <td>Siti</td>
+                <td>George Town</td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="notFound" class="not-found" style="display: none;">Data tidak ditemukan!</div>
 
-<script>
-    const data = [
-        { NIK: "1234567890", nama: "Ali", alamat: "Kuala Lumpur" },
-        { NIK: "0987654321", nama: "Siti", alamat: "Penang" }
-    ];
+    <script>
+        function searchData() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const table = document.getElementById('dataTable');
+            const tr = table.getElementsByTagName('tr');
+            let found = false;
 
-    function searchData() {
-        const input = document.getElementById('searchInput').value;
-        const resultDiv = document.getElementById('result');
-        resultDiv.innerHTML = ''; // Reset result
+            for (let i = 1; i < tr.length; i++) {
+                const tdNIK = tr[i].getElementsByTagName('td')[0];
+                const tdNama = tr[i].getElementsByTagName('td')[1];
+                if (tdNIK || tdNama) {
+                    const nikValue = tdNIK.textContent.toLowerCase();
+                    const namaValue = tdNama.textContent.toLowerCase();
+                    if (nikValue.indexOf(input) > -1 || namaValue.indexOf(input) > -1) {
+                        tr[i].style.display = '';
+                        found = true;
+                    } else {
+                        tr[i].style.display = 'none';
+                    }
+                }
+            }
 
-        const filteredData = data.filter(item => item.NIK.includes(input) || item.nama.includes(input));
-
-        if (filteredData.length === 0) {
-            resultDiv.innerHTML = '<p class="error">NIK atau nama tidak terdaftar.</p>';
-        } else {
-            let table = '<table><tr><th>NIK</th><th>Nama</th><th>Alamat</th></tr>';
-            filteredData.forEach(item => {
-                table += `<tr><td>${item.NIK}</td><td>${item.nama}</td><td>${item.alamat}</td></tr>`;
-            });
-            table += '</table>';
-            resultDiv.innerHTML = table;
+            document.getElementById('notFound').style.display = found ? 'none' : 'block';
         }
-    }
-</script>
+    </script>
 
 </body>
 </html>
