@@ -1,59 +1,68 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pencarian NIK</title>
+    <title>Data Pengguna</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            margin: 20px;
-        }
-        .container {
-            background-color: #fff;
+            margin: 0;
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        input[type="text"] {
-            padding: 10px;
-            margin-bottom: 10px;
+        table {
             width: 100%;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
-        .result {
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
             padding: 10px;
-            border-radius: 5px;
-            background-color: #e7f3fe;
-            color: #31708f;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Pencarian Data NIK</h2>
-    <input type="text" id="nikInput" placeholder="Masukkan NIK" oninput="searchNIK()">
-    <div id="result" class="result"></div>
-</div>
+<h1>Carian Data Pengguna</h1>
+<input type="text" id="searchInput" placeholder="Masukkan NIK atau Nama">
+<button onclick="searchData()">Cari</button>
+
+<div id="result"></div>
 
 <script>
-    function searchNIK() {
-        const nikInput = document.getElementById('nikInput').value;
+    const data = [
+        { NIK: "1234567890", nama: "Ali", alamat: "Kuala Lumpur" },
+        { NIK: "0987654321", nama: "Siti", alamat: "Penang" }
+    ];
+
+    function searchData() {
+        const input = document.getElementById('searchInput').value;
         const resultDiv = document.getElementById('result');
-        
-        if (nikInput === '') {
-            resultDiv.innerHTML = 'Silakan masukkan NIK untuk melihat data.';
+        resultDiv.innerHTML = ''; // Reset result
+
+        const filteredData = data.filter(item => item.NIK.includes(input) || item.nama.includes(input));
+
+        if (filteredData.length === 0) {
+            resultDiv.innerHTML = '<p class="error">NIK atau nama tidak terdaftar.</p>';
         } else {
-            // Simulasi data. Anda bisa mengganti ini dengan data asli.
-            const data = {
-                '123456789': 'Nama: John Doe, Alamat: Jakarta',
-                '987654321': 'Nama: Jane Smith, Alamat: Bandung'
-            };
-            
-            resultDiv.innerHTML = data[nikInput] || 'Data tidak ditemukan.';
+            let table = '<table><tr><th>NIK</th><th>Nama</th><th>Alamat</th></tr>';
+            filteredData.forEach(item => {
+                table += `<tr><td>${item.NIK}</td><td>${item.nama}</td><td>${item.alamat}</td></tr>`;
+            });
+            table += '</table>';
+            resultDiv.innerHTML = table;
         }
     }
 </script>
