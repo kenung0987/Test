@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pencarian NIK</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .result {
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #e7f3fe;
+            color: #31708f;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Pencarian Data NIK</h2>
+    <input type="text" id="nikInput" placeholder="Masukkan NIK" oninput="searchNIK()">
+    <div id="result" class="result"></div>
+</div>
+
+<script>
+    function searchNIK() {
+        const nikInput = document.getElementById('nikInput').value;
+        const resultDiv = document.getElementById('result');
+        
+        if (nikInput === '') {
+            resultDiv.innerHTML = 'Silakan masukkan NIK untuk melihat data.';
+        } else {
+            // Simulasi data. Anda bisa mengganti ini dengan data asli.
+            const data = {
+                '123456789': 'Nama: John Doe, Alamat: Jakarta',
+                '987654321': 'Nama: Jane Smith, Alamat: Bandung'
+            };
+            
+            resultDiv.innerHTML = data[nikInput] || 'Data tidak ditemukan.';
+        }
+    }
+</script>
+
+</body>
+</html>
