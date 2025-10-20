@@ -94,7 +94,7 @@
 
     .letter {
       position: absolute;
-      top: -200px;
+      top: -220px;
       background: #fff;
       padding: 20px;
       width: 100%;
@@ -187,8 +187,9 @@
       transform: translateX(-50%);
     }
 
+    /* 💌 Saat amplop terbuka */
     .open .envelope {
-      transform: translateY(90px);
+      transform: translateY(160px); /* 🔽 Amplop turun lebih jauh */
     }
 
     .open .top-flap {
@@ -204,7 +205,13 @@
       transform: scale(1);
     }
 
-    /* Responsif kecil */
+    /* Tambahan untuk HP kecil */
+    @media (max-height: 700px) {
+      .open .envelope {
+        transform: translateY(130px); /* Sedikit naik jika layar terlalu pendek */
+      }
+    }
+
     @media (max-width: 380px) {
       .letter p { font-size: 14px; }
       .bear { width: 60px; height: 60px; }
