@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Surat Spesial</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #fff8f2, #fbeee5);
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Kanvas kembang api */
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    /* ====================
+       AMBLOP LEBIH REALISTIS
+       ==================== */
+    .envelope {
+      width: 320px;
+      height: 200px;
+      position: relative;
+      background: #e0b89b;
+      border-radius: 6px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      transition: transform 1s ease;
+    }
+
+    /* Bagian depan bawah amplop */
+    .envelope .bottom-flap {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, #d8a48f, #e8c4a3);
+      clip-path: polygon(0% 100%, 50% 30%, 100% 100%);
+      z-index: 1;
+    }
+
+    /* Tutup amplop atas */
+    .envelope .top-flap {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, #c98a76, #e6b79e);
+      clip-path: polygon(0 0, 50% 60%, 100% 0);
+      transform-origin: top center;
+      transition: transform 0.6s ease;
+      z-index: 3;
+    }
+
+    /* Segel lingkaran kecil */
+    .seal {
+      position: absolute;
+      top: 90px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 35px;
+      height: 35px;
+      background: radial-gradient(circle, #b6654e 20%, #7b3a2c 80%);
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      z-index: 4;
+    }
+
+    /* Surat */
+    .letter {
+      position: absolute;
+      top: -200px;
+      background: #fff;
+      padding: 25px 30px;
+      width: 320px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      color: #333;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 1s ease;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .letter p {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    /* Beruang lucu */
+    .bear {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      background: #b46a43;
+      border-radius: 50%;
+      flex-shrink: 0;
+      transform: scale(0);
+      transition: transform 1s ease-in-out;
+    }
+
+    /* Telinga */
+    .bear::before,
+    .bear::after {
+      content: "";
+      position: absolute;
+      width: 35px;
+      height: 35px;
+      background: #b46a43;
+      border-radius: 50%;
+      top: -15px;
+    }
+
+    .bear::before { left: -10px; }
+    .bear::after { right: -10px; }
+
+    /* Wajah dalam */
+    .face {
+      position: absolute;
+      width: 55px;
+      height: 40px;
+      background: #e3b7a0;
+      border-radius: 50%;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* Mata */
+    .eye {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #333;
+      border-radius: 50%;
+      top: 25px;
+    }
+    .eye.left { left: 20px; }
+    .eye.right { right: 20px; }
+
+    /* Hidung & mulut */
+    .nose {
+      position: absolute;
+      width: 15px;
+      height: 10px;
+      background: #333;
+      border-radius: 50% 50% 60% 60%;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .mouth {
+      position: absolute;
+      width: 20px;
+      height: 10px;
+      border-bottom: 2px solid #333;
+      border-radius: 0 0 20px 20px;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* State OPEN */
+    .open .envelope {
+      transform: translateY(100px);
+    }
+
+    .open .top-flap {
+      transform: rotateX(180deg);
+    }
+
+    .open .letter {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .open .bear {
+      transform: scale(1);
+    }
+
+    @media (max-width: 450px) {
+      .envelope {
+        width: 260px;
+        height: 160px;
+      }
+
+      .letter {
+        width: 260px;
+        padding: 20px;
+        font-size: 14px;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .bear {
+        margin-top: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="fireworks"></canvas>
+
+  <div class="container" onclick="openEnvelope()">
+    <div class="envelope">
+      <div class="bottom-flap"></div>
+      <div class="top-flap"></div>
+      <div class="seal"></div>
+    </div>
+
+    <div class="letter">
+      <p>
+        Untukmu yang teristimewa,<br><br>
+        Seperti beruang yang hangat di musim dingin, begitulah pelukanku untukmu. <br>
+        Semoga surat ini membawa senyum dan kehangatan di harimu.<br><br>
+        🧸 Dengan cinta,<br>
+        Seseorang yang mengagumimu.
+      </p>
+
+      <div class="bear">
+        <div class="face"></div>
+        <div class="eye left"></div>
+        <div class="eye right"></div>
+        <div class="nose"></div>
+        <div class="mouth"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const container = document.querySelector('.container');
+    const canvas = document.getElementById('fireworks');
+    const ctx = canvas.getContext('2d');
+    let fireworks = [];
+    let animation;
+    let running = false;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Firework {
+      constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.particles = [];
+        this.createParticles();
+      }
+
+      createParticles() {
+        for (let i = 0; i < 40; i++) {
+          const angle = (Math.PI * 2 * i) / 40;
+          const speed = Math.random() * 3 + 2;
+          this.particles.push({
+            x: this.x,
+            y: this.y,
+            dx: Math.cos(angle) * speed,
+            dy: Math.sin(angle) * speed,
+            life: 100 + Math.random() * 50,
+          });
+        }
+      }
+
+      update() {
+        this.particles.forEach(p => {
+          p.x += p.dx;
+          p.y += p.dy;
+          p.dy += 0.03;
+          p.life--;
+        });
+        this.particles = this.particles.filter(p => p.life > 0);
+      }
+
+      draw() {
+        this.particles.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+          ctx.fillStyle = this.color;
+          ctx.fill();
+        });
+      }
+    }
+
+    function animateFireworks() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      fireworks.forEach(f => {
+        f.update();
+        f.draw();
+      });
+      fireworks = fireworks.filter(f => f.particles.length > 0);
+
+      if (running && Math.random() < 0.05) {
+        triggerFireworks();
+      }
+
+      animation = requestAnimationFrame(animateFireworks);
+    }
+
+    function triggerFireworks() {
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * (canvas.height / 2);
+      const color = `hsl(${Math.random() * 360}, 80%, 60%)`;
+      fireworks.push(new Firework(x, y, color));
+    }
+
+    function openEnvelope() {
+      container.classList.toggle('open');
+      if (container.classList.contains('open')) {
+        running = true;
+        animateFireworks();
+      } else {
+        running = false;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+  </script>
+</body>
+</html>
