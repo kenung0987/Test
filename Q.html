@@ -2,14 +2,16 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Surat Spesial</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Surat Spesial 💌</title>
   <style>
-    * { box-sizing: border-box; }
-
-    body {
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    body {
       background: radial-gradient(circle at top, #fff8f2, #fbeee5);
       font-family: 'Segoe UI', sans-serif;
       overflow: hidden;
@@ -20,7 +22,6 @@
       position: relative;
     }
 
-    /* Kanvas kembang api */
     canvas {
       position: fixed;
       top: 0;
@@ -39,24 +40,22 @@
       justify-content: center;
       cursor: pointer;
       z-index: 2;
+      width: 90%;
+      max-width: 360px;
     }
 
-    /* ====================
-       AMBLOP LEBIH REALISTIS
-       ==================== */
     .envelope {
-      width: 320px;
-      height: 200px;
+      width: 100%;
+      aspect-ratio: 1.6 / 1;
       position: relative;
       background: #e0b89b;
-      border-radius: 6px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
       overflow: hidden;
       transition: transform 1s ease;
     }
 
-    /* Bagian depan bawah amplop */
-    .envelope .bottom-flap {
+    .bottom-flap {
       position: absolute;
       bottom: 0;
       left: 0;
@@ -67,9 +66,7 @@
       z-index: 1;
     }
 
-    /* Tutup amplop atas */
-    .envelope .top-flap {
-      content: "";
+    .top-flap {
       position: absolute;
       top: 0;
       left: 0;
@@ -82,51 +79,49 @@
       z-index: 3;
     }
 
-    /* Segel lingkaran kecil */
     .seal {
       position: absolute;
-      top: 90px;
+      top: 45%;
       left: 50%;
-      transform: translateX(-50%);
-      width: 35px;
-      height: 35px;
+      transform: translate(-50%, -50%);
+      width: 30px;
+      height: 30px;
       background: radial-gradient(circle, #b6654e 20%, #7b3a2c 80%);
       border-radius: 50%;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
       z-index: 4;
     }
 
-    /* Surat */
     .letter {
       position: absolute;
       top: -200px;
       background: #fff;
-      padding: 25px 30px;
-      width: 320px;
+      padding: 20px;
+      width: 100%;
       border-radius: 10px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
       color: #333;
       opacity: 0;
-      transform: translateY(50px);
+      transform: translateY(40px);
       transition: all 1s ease;
       z-index: 10;
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 15px;
+      flex-wrap: wrap;
+      text-align: center;
     }
 
     .letter p {
-      margin: 0;
-      font-size: 16px;
+      flex: 1 1 100%;
+      font-size: 15px;
       line-height: 1.6;
-      flex: 1;
     }
 
-    /* Beruang lucu */
     .bear {
       position: relative;
-      width: 80px;
-      height: 80px;
+      width: 70px;
+      height: 70px;
       background: #b46a43;
       border-radius: 50%;
       flex-shrink: 0;
@@ -134,71 +129,66 @@
       transition: transform 1s ease-in-out;
     }
 
-    /* Telinga */
     .bear::before,
     .bear::after {
       content: "";
       position: absolute;
-      width: 35px;
-      height: 35px;
+      width: 28px;
+      height: 28px;
       background: #b46a43;
       border-radius: 50%;
-      top: -15px;
+      top: -12px;
     }
 
-    .bear::before { left: -10px; }
-    .bear::after { right: -10px; }
+    .bear::before { left: -8px; }
+    .bear::after { right: -8px; }
 
-    /* Wajah dalam */
     .face {
       position: absolute;
-      width: 55px;
-      height: 40px;
+      width: 48px;
+      height: 35px;
       background: #e3b7a0;
       border-radius: 50%;
-      bottom: 15px;
+      bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
     }
 
-    /* Mata */
     .eye {
       position: absolute;
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       background: #333;
       border-radius: 50%;
-      top: 25px;
+      top: 22px;
     }
-    .eye.left { left: 20px; }
-    .eye.right { right: 20px; }
+    .eye.left { left: 18px; }
+    .eye.right { right: 18px; }
 
-    /* Hidung & mulut */
     .nose {
       position: absolute;
-      width: 15px;
-      height: 10px;
+      width: 12px;
+      height: 8px;
       background: #333;
       border-radius: 50% 50% 60% 60%;
-      top: 40px;
+      top: 35px;
       left: 50%;
       transform: translateX(-50%);
     }
 
     .mouth {
       position: absolute;
-      width: 20px;
-      height: 10px;
+      width: 16px;
+      height: 8px;
       border-bottom: 2px solid #333;
       border-radius: 0 0 20px 20px;
-      top: 50px;
+      top: 45px;
       left: 50%;
       transform: translateX(-50%);
     }
 
-    /* State OPEN */
     .open .envelope {
-      transform: translateY(100px);
+      transform: translateY(90px);
     }
 
     .open .top-flap {
@@ -214,28 +204,14 @@
       transform: scale(1);
     }
 
-    @media (max-width: 450px) {
-      .envelope {
-        width: 260px;
-        height: 160px;
-      }
-
-      .letter {
-        width: 260px;
-        padding: 20px;
-        font-size: 14px;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .bear {
-        margin-top: 15px;
-      }
+    /* Responsif kecil */
+    @media (max-width: 380px) {
+      .letter p { font-size: 14px; }
+      .bear { width: 60px; height: 60px; }
     }
   </style>
 </head>
 <body>
-
   <canvas id="fireworks"></canvas>
 
   <div class="container" onclick="openEnvelope()">
@@ -247,8 +223,8 @@
 
     <div class="letter">
       <p>
-        Untukmu yang teristimewa,<br><br>
-        Seperti beruang yang hangat di musim dingin, begitulah pelukanku untukmu. <br>
+        Untukmu yang teristimewa 💖<br><br>
+        Seperti beruang yang hangat di musim dingin, begitulah pelukanku untukmu.<br>
         Semoga surat ini membawa senyum dan kehangatan di harimu.<br><br>
         🧸 Dengan cinta,<br>
         Seseorang yang mengagumimu.
