@@ -14,11 +14,13 @@
     body {
       background: radial-gradient(circle at top, #fff8f2, #fbeee5);
       font-family: 'Segoe UI', sans-serif;
-      overflow: hidden;
-      height: 100vh;
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto; /* ⬅️ biar bisa discroll di HP */
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start; /* ⬅️ mulai dari atas layar */
+      padding-top: 80px; /* ⬅️ spasi agar amplop kelihatan */
       position: relative;
     }
 
@@ -42,6 +44,8 @@
       z-index: 2;
       width: 90%;
       max-width: 360px;
+      margin-bottom: 100px; /* ruang tambahan di bawah */
+      transition: all 1s ease;
     }
 
     .envelope {
@@ -53,6 +57,7 @@
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
       overflow: hidden;
       transition: transform 1s ease;
+      z-index: 2;
     }
 
     .bottom-flap {
@@ -93,8 +98,8 @@
     }
 
     .letter {
-      position: absolute;
-      top: -220px;
+      position: relative;
+      top: -40px;
       background: #fff;
       padding: 20px;
       width: 100%;
@@ -102,9 +107,9 @@
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
       color: #333;
       opacity: 0;
-      transform: translateY(40px);
+      transform: translateY(50px);
       transition: all 1s ease;
-      z-index: 10;
+      z-index: 1;
       display: flex;
       align-items: center;
       gap: 15px;
@@ -189,7 +194,7 @@
 
     /* 💌 Saat amplop terbuka */
     .open .envelope {
-      transform: translateY(160px); /* 🔽 Amplop turun lebih jauh */
+      transform: translateY(120px); /* turun pas dibuka */
     }
 
     .open .top-flap {
@@ -205,13 +210,7 @@
       transform: scale(1);
     }
 
-    /* Tambahan untuk HP kecil */
-    @media (max-height: 700px) {
-      .open .envelope {
-        transform: translateY(130px); /* Sedikit naik jika layar terlalu pendek */
-      }
-    }
-
+    /* Responsif untuk layar kecil */
     @media (max-width: 380px) {
       .letter p { font-size: 14px; }
       .bear { width: 60px; height: 60px; }
@@ -333,6 +332,7 @@
       if (container.classList.contains('open')) {
         running = true;
         animateFireworks();
+        setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 200);
       } else {
         running = false;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
