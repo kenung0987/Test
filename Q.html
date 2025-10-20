@@ -10,13 +10,11 @@
     body {
       background: radial-gradient(circle at top, #fff8f2, #fbeee5);
       font-family: 'Segoe UI', sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-      overflow-y: auto;
+      height: 100vh;
+      overflow: hidden;
       display: flex;
       justify-content: center;
-      align-items: flex-end; /* ⬅️ posisi amplop di bawah layar */
-      padding-bottom: 60px;  /* ⬅️ biar sedikit naik ke atas */
+      align-items: center;
       position: relative;
     }
 
@@ -35,22 +33,20 @@
       align-items: center;
       cursor: pointer;
       z-index: 2;
-      width: 90%;
-      max-width: 360px;
-      transition: all 1s ease;
-      transform: translateY(50%); /* ⬅️ amplop terlihat setengah */
+      transition: transform 1s ease;
+      transform: translateY(80px); /* amplop naik dikit, kelihatan setengah */
     }
 
     .envelope {
-      width: 100%;
-      aspect-ratio: 1.6 / 1;
+      width: 300px;
+      height: 180px;
       background: #e0b89b;
       border-radius: 8px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
       position: relative;
       overflow: hidden;
       transition: transform 1s ease;
-      z-index: 2;
+      z-index: 3; /* di atas surat saat tertutup */
     }
 
     .bottom-flap {
@@ -85,16 +81,16 @@
     }
 
     .letter {
-      position: relative;
-      top: -40px;
+      position: absolute;
+      bottom: 60px;
       background: #fff;
       padding: 20px;
-      width: 100%;
+      width: 300px;
       border-radius: 10px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
       color: #333;
       opacity: 0;
-      transform: translateY(50px);
+      transform: translateY(60px);
       transition: all 1s ease;
       z-index: 1;
       display: flex;
@@ -180,9 +176,9 @@
       transform: translateX(-50%);
     }
 
-    /* ✨ Saat dibuka */
+    /* ✨ Animasi saat dibuka */
     .open {
-      transform: translateY(0); /* naik ke tengah layar */
+      transform: translateY(0);
     }
 
     .open .envelope {
@@ -203,6 +199,8 @@
     }
 
     @media (max-width: 380px) {
+      .envelope { width: 260px; height: 150px; }
+      .letter { width: 260px; bottom: 50px; }
       .letter p { font-size: 14px; }
       .bear { width: 60px; height: 60px; }
     }
